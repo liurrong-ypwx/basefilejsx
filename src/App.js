@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import TestLess from './pages/TestLess/TestLess';
 
 function App() {
   return (
@@ -18,7 +19,10 @@ function App() {
           Learn React
         </a>
       </header>
-    </div>
+
+      <TestLess />
+
+    </div> 
   );
 }
 
