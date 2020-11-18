@@ -1,25 +1,39 @@
-import React, { useEffect } from "react";
-import L from 'leaflet';
-import {tiledMapLayer} from '@supermap/iclient-leaflet';
+import React, { useEffect, useState } from "react";
+import * as MapApi from "../../utils/map/MainMap";
+import { BASE_MAP_URL } from "../../utils/map/RequestPath";
+import MapDraw from "../component/MapDraw/MapDraw";
 
 import "./MapPage.less";
 
 function MapPage() {
 
+    const [map, setMap] = useState(null);
+
     useEffect(() => {
-        const url = "https://iserver.supermap.io/iserver/services/map-world/rest/maps/World";
-        const map = L.map('map', {
-            crs: L.CRS.EPSG4326,
-            center: [0, 0],
-            maxZoom: 18,
-            zoom: 1
-        });
-        tiledMapLayer(url).addTo(map);
+        initMap();
+        // eslint-disable-next-line
     }, [])
+
+    // 粉刷匠 初始化地图
+    const initMap = () => {
+
+        if(map){
+            map.off();
+            map.remove();
+        }
+        const tmpMap = MapApi.initMap("map", BASE_MAP_URL);  
+        setMap(tmpMap);
+    
+ 
+    }
+
+
 
     return (
         <div className="map-page">
-            <div className="map-container" id="map" />
+            <div className="map-container" id="map" >
+                <MapDraw />
+            </div>
         </div>
     )
 }
