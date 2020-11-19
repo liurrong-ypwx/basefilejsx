@@ -6,17 +6,29 @@ import { BASE_MAP_CHINA, BASE_MAP_CHINA_DARK } from './RequestPath';
 const China = L.supermap.tiledMapLayer(BASE_MAP_CHINA, { noWrap: true });
 const ChinaDark = L.supermap.tiledMapLayer(BASE_MAP_CHINA_DARK, { noWrap: true });
 
-// =======================================初始化地图=======================================
+// =======================================初始化=======================================
+// 初始化地图--使用指定路径的底图
 export const initMap = (domID, mapUrl) => {
     const tmpMap = L.map(domID, {
-        // crs: L.CRS.EPSG4326,
+        crs: L.CRS.EPSG4326,
         center: [24, 113],
         // maxZoom: 18,
         zoom: 5,
     });
-    // tiledMapLayer(mapUrl).addTo(tmpMap);
+    tiledMapLayer(mapUrl).addTo(tmpMap);
     return tmpMap;
 }
+
+// 初始化地图--使用supermap的底图
+export const initSuperMap = (domID) => {
+    const tmpMap = L.map(domID, {
+        center: [24, 113],
+        zoom: 5,
+    });
+    L.supermap.tiledMapLayer(BASE_MAP_CHINA).addTo(tmpMap);
+    return tmpMap;
+}
+
 
 // ===========================粉刷匠 添加地图组件：缩放、比例尺、图层切换 ===========================
 export const addMapCom = (type, orgMap) => {

@@ -22,8 +22,8 @@ function MapPage() {
             map.off();
             map.remove();
         }
-        const tmpMap = MapApi.initMap("map", BASE_MAP_URL);
-        MapApi.addTiledVectorLayer(tmpMap);
+        const tmpMap = MapApi.initSuperMap("map");
+
         setMap(tmpMap);
     
  
