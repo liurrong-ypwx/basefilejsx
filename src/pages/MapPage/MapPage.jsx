@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as MapApi from "../../utils/map/MainMap";
 import { BASE_MAP_URL } from "../../utils/map/RequestPath";
 import MapDraw from "../component/MapDraw/MapDraw";
+import MapZoom from "../component/MapZoom/MapZoom";
 
 import "./MapPage.less";
 
@@ -21,7 +22,8 @@ function MapPage() {
             map.off();
             map.remove();
         }
-        const tmpMap = MapApi.initMap("map", BASE_MAP_URL);  
+        const tmpMap = MapApi.initMap("map", BASE_MAP_URL);
+        MapApi.addTiledVectorLayer(tmpMap);
         setMap(tmpMap);
     
  
@@ -33,6 +35,7 @@ function MapPage() {
         <div className="map-page">
             <div className="map-container" id="map" >
                 <MapDraw />
+                <MapZoom />
             </div>
         </div>
     )
