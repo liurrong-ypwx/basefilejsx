@@ -9,12 +9,12 @@ const ChinaDark = L.supermap.tiledMapLayer(BASE_MAP_CHINA_DARK, { noWrap: true }
 // =======================================初始化地图=======================================
 export const initMap = (domID, mapUrl) => {
     const tmpMap = L.map(domID, {
-        crs: L.CRS.EPSG4326,
+        // crs: L.CRS.EPSG4326,
         center: [24, 113],
         // maxZoom: 18,
         zoom: 5,
     });
-    tiledMapLayer(mapUrl).addTo(tmpMap);
+    // tiledMapLayer(mapUrl).addTo(tmpMap);
     return tmpMap;
 }
 
@@ -91,22 +91,43 @@ export const addTiledVectorLayer = (orgmap) => {
     const vectorLayer = L.supermap.tiledVectorLayer(url, {
         cacheEnabled: true,
         returnAttributes: true,
-        // attribution: "Tile Data©SuperMap iServer with©SuperMap iClient"
+        attribution: "Tile Data©SuperMap iServer with©SuperMap iClient"
     }).addTo(orgmap);
 
+    if (vectorLayer) {
 
-    //矢量瓦片图层添加点击事件，设置默认风格
-    vectorLayer.on('click', function (evt) {
-        // 点击矢量瓦片图层获取id & layerName
-        const selectId = evt.layer.properties.id;
-        const selectLayerName = evt.layer.layerName;
-        // 设置矢量瓦片图层样式
-        const selectStyle = {
-            fillColor: '#800026',
-            fillOpacity: 0.5,
-            stroke: true, fill: true, color: 'red', opacity: 1, weight: 2
-        };
-        vectorLayer.setFeaturvectorLayer.setFeatureStyle(selectId, selectLayerName, selectStyle);
-    });
+        let id = null;
+        let layerName = null;
+
+        //矢量瓦片图层添加点击事件，设置默认风格
+        vectorLayer.on('click', function (evt) {
+            // 点击矢量瓦片图层获取id & layerName
+            const selectId = evt.layer.properties.id;
+            const selectLayerName = evt.layer.layerName;
+            // 清空高亮
+            clearHighLight();
+            id = selectId;
+            layerName = selectLayerName;
+            // 设置矢量瓦片图层样式
+            const selectStyle = {
+                fillColor: '#800026',
+                fillOpacity: 0.5,
+                stroke: true, fill: true, color: 'red', opacity: 1, weight: 2
+            };
+            vectorLayer.setFeatureStyle(selectId, selectLayerName, selectStyle);
+        });
+
+        // 清空之前的高亮
+        const clearHighLight = () => {
+            if (id && layerName) {
+                vectorLayer.resetFeatureStyle(id, layerName);
+            }
+            id = null;
+            layerName = null;
+        }
+    
+    }
+
+  
 }
 
