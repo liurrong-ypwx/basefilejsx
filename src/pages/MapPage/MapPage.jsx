@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import * as MapApi from "../../utils/map/MainMap";
-import { BASE_MAP_URL } from "../../utils/map/RequestPath";
 import MapDraw from "../component/MapDraw/MapDraw";
 import MapZoom from "../component/MapZoom/MapZoom";
 
@@ -23,6 +22,7 @@ function MapPage() {
             map.remove();
         }
         const tmpMap = MapApi.initSuperMap("map");
+        // MapApi.addDrawTool(tmpMap);
 
         setMap(tmpMap);
     

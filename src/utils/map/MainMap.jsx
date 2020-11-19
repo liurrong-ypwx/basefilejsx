@@ -14,6 +14,7 @@ export const initMap = (domID, mapUrl) => {
         center: [24, 113],
         // maxZoom: 18,
         zoom: 5,
+        drawControl:true,
     });
     tiledMapLayer(mapUrl).addTo(tmpMap);
     return tmpMap;
@@ -24,6 +25,7 @@ export const initSuperMap = (domID) => {
     const tmpMap = L.map(domID, {
         center: [24, 113],
         zoom: 5,
+        drawControl:true,
     });
     L.supermap.tiledMapLayer(BASE_MAP_CHINA).addTo(tmpMap);
     return tmpMap;
@@ -48,17 +50,17 @@ export const addMapCom = (type, orgMap) => {
 
 // ============================粉刷匠 画点、线、面===============================
 export const addDrawTool = (map) => {
-    // 创建一个绘制图层
-    let editableLayers = new L.FeatureGroup();
-    // 绘制控件参数配置
-    let options = {
+
+    const editableLayers = new L.FeatureGroup();
+    map.addLayer(editableLayers);
+    const options = {
         position: 'topleft',
         draw: {
-            polyline: {}, // 线
-            polygon: {}, // 面
-            circle: {}, // 圆
-            rectangle: {}, // 矩形
-            marker: {}, // 标记点
+            polyline: {},
+            polygon: {},
+            circle: {},
+            rectangle: {},
+            marker: {},
             remove: {}
         },
         edit: {
@@ -66,15 +68,33 @@ export const addDrawTool = (map) => {
             remove: true
         }
     };
-    // 创建并添加绘制控件
-    let drawControl = new L.Control.Draw(options);
+
+    const handleMapEvent = (div, map) => {
+        if (!div || !map) {
+            return;
+        }
+        div.addEventListener('mouseover', function () {
+            map.scrollWheelZoom.disable();
+            map.doubleClickZoom.disable();
+        });
+        div.addEventListener('mouseout', function () {
+            map.scrollWheelZoom.enable();
+            map.doubleClickZoom.enable();
+        });
+    }
+
+    const drawControl = new L.Control.Draw(options);
     map.addControl(drawControl);
-    // 监听绘制事件
+    handleMapEvent(drawControl._container, map);
     map.on(L.Draw.Event.CREATED, function (e) {
-        // let type = e.layerType;
-        let layer = e.layer;
+        var type = e.layerType,
+            layer = e.layer;
+        if (type === 'marker') {
+            layer.bindPopup('A popup!');
+        }
         editableLayers.addLayer(layer);
     });
+
 }
 
 
